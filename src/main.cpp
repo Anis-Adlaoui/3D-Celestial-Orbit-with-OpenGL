@@ -218,7 +218,7 @@ int main() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     int texWidth, texHeight, texChannels;
-    unsigned char* earth_texture = stbi_load("C:/Users/Msi_Katana B12V/Desktop/IV/Synthèse d'images/Texture/earth.jpg", &texWidth, &texHeight, &texChannels, 0);
+    unsigned char* earth_texture = stbi_load("earth.jpg", &texWidth, &texHeight, &texChannels, 0);
 
     if (earth_texture) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, earth_texture);
@@ -234,7 +234,7 @@ int main() {
     glGenTextures(1, &earthTexture2);
     glBindTexture(GL_TEXTURE_2D, earthTexture2);
     int texWidth2, texHeight2, texChannels2;
-    unsigned char* earth_texture2 = stbi_load("C:/Users/Msi_Katana B12V/Desktop/IV/Synthèse d'images/Texture/earth2.jpg", &texWidth2, &texHeight2, &texChannels2, 0);
+    unsigned char* earth_texture2 = stbi_load("earth2.jpg", &texWidth2, &texHeight2, &texChannels2, 0);
     if (earth_texture2) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth2, texHeight2, 0, GL_RGB, GL_UNSIGNED_BYTE, earth_texture2);
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -244,8 +244,8 @@ int main() {
     }
     stbi_image_free(earth_texture2);
 
-    GLuint ShaderProgram = LoadShaders("C:/Users/Msi_Katana B12V/Desktop/IV/Synthèse d'images/shader/shader/SimpleVertexShader.vertexshader",
-        "C:/Users/Msi_Katana B12V/Desktop/IV/Synthèse d'images/shader/shader/SimpleFragmentShader.fragmentshader");
+    GLuint ShaderProgram = LoadShaders("shader/SimpleVertexShader.vertexshader",
+        "shader/SimpleFragmentShader.fragmentshader");
 
     float cameraRotationSpeed = 0.5f; // Vitesse de rotation de la caméra
     float cameraDistance = 5.0f;      // Distance initiale de la caméra

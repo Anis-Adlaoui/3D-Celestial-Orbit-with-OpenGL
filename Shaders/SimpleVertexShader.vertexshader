@@ -1,20 +1,19 @@
 #version 330 core
 
-layout (location = 0) in vec3 VertexPosition; // Position des sommets
-layout (location = 1) in vec2 TexCoords;     // Coordonnées de texture
+layout (location = 0) in vec3 VertexPosition;
+layout (location = 1) in vec2 TexCoords;
 
-uniform mat4 MVP;          // Matrice de transformation
-uniform int isStar;        // 0 pour la Terre, 1 pour les étoiles
-uniform float starRotation; // Rotation des étoiles
+uniform mat4 MVP;
+uniform int isStar;
+uniform float starRotation;
 
-out vec2 TexCoordsOut;      // Coordonnées envoyées au fragment shader
-flat out int isStarOut;     // Indicateur envoyé au fragment shader
+out vec2 TexCoordsOut;
+flat out int isStarOut;
 
 void main() {
-    mat4 modelMatrix = mat4(1.0); // Matrice de modèle locale
+    mat4 modelMatrix = mat4(1.0);
 
     if (isStar == 1) {
-        // Appliquer une rotation supplémentaire aux étoiles
         modelMatrix = mat4(
             cos(starRotation), 0.0, sin(starRotation), 0.0,
             0.0,             1.0, 0.0,             0.0,
@@ -25,6 +24,6 @@ void main() {
 
     gl_Position = MVP * modelMatrix * vec4(VertexPosition, 1.0);
 
-    TexCoordsOut = TexCoords; // Transmettre les coordonnées de texture
-    isStarOut = isStar;       // Transmettre l'indicateur
+    TexCoordsOut = TexCoords;
+    isStarOut = isStar;
 }

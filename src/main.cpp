@@ -116,6 +116,19 @@ void updateStarPositions(std::vector<vec3>& starPositions, float rotationSpeed, 
     }
 }
 
+float ambientLightIntensity = 0.5f; 
+
+void adjustAmbientLight(GLFWwindow* window, float deltaTime) {
+    if (glfwGetKey(window, GLFW_KEY_KP_ADD) == GLFW_PRESS) {
+        ambientLightIntensity += 0.5f * deltaTime;
+        if (ambientLightIntensity > 1.0f) ambientLightIntensity = 1.0f;
+    }
+    if (glfwGetKey(window, GLFW_KEY_KP_SUBTRACT) == GLFW_PRESS) {
+        ambientLightIntensity -= 0.5f * deltaTime;
+        if (ambientLightIntensity < 0.0f) ambientLightIntensity = 0.0f;
+    }
+}
+
 int main() {
     GLFWwindow* window;
     int widthWindow = 800, heightWindow = 800;
@@ -218,7 +231,7 @@ int main() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     int texWidth, texHeight, texChannels;
-    unsigned char* earth_texture = stbi_load("earth.jpg", &texWidth, &texHeight, &texChannels, 0);
+    unsigned char* earth_texture = stbi_load("C:/Users/Msi_Katana B12V/Desktop/IV/Synthèse d'images/Texture/earth.jpg", &texWidth, &texHeight, &texChannels, 0);
 
     if (earth_texture) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, earth_texture);
@@ -234,7 +247,7 @@ int main() {
     glGenTextures(1, &earthTexture2);
     glBindTexture(GL_TEXTURE_2D, earthTexture2);
     int texWidth2, texHeight2, texChannels2;
-    unsigned char* earth_texture2 = stbi_load("earth2.jpg", &texWidth2, &texHeight2, &texChannels2, 0);
+    unsigned char* earth_texture2 = stbi_load("C:/Users/Msi_Katana B12V/Desktop/IV/Synthèse d'images/Texture/earth2.jpg", &texWidth2, &texHeight2, &texChannels2, 0);
     if (earth_texture2) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth2, texHeight2, 0, GL_RGB, GL_UNSIGNED_BYTE, earth_texture2);
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -244,8 +257,8 @@ int main() {
     }
     stbi_image_free(earth_texture2);
 
-    GLuint ShaderProgram = LoadShaders("shader/SimpleVertexShader.vertexshader",
-        "shader/SimpleFragmentShader.fragmentshader");
+    GLuint ShaderProgram = LoadShaders("C:/Users/Msi_Katana B12V/Desktop/IV/Synthèse d'images/shader/shader/SimpleVertexShader.vertexshader",
+        "C:/Users/Msi_Katana B12V/Desktop/IV/Synthèse d'images/shader/shader/SimpleFragmentShader.fragmentshader");
 
     float cameraRotationSpeed = 0.5f; // Vitesse de rotation de la caméra
     float cameraDistance = 5.0f;      // Distance initiale de la caméra
@@ -260,6 +273,8 @@ int main() {
     GLuint IsStarID = glGetUniformLocation(ShaderProgram, "isStar");
     GLuint StarColorID = glGetUniformLocation(ShaderProgram, "starColor");
     GLuint TextureID = glGetUniformLocation(ShaderProgram, "texture1"); // Get texture uniform ID
+    GLuint AmbientLightID = glGetUniformLocation(ShaderProgram, "ambientLightIntensity");
+
 
 
 
@@ -285,6 +300,10 @@ int main() {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(ShaderProgram);
+
+        adjustAmbientLight(window, deltaTime);
+
+        glUniform1f(AmbientLightID, ambientLightIntensity);
 
         // Check for 'L' key press to toggle texture
         if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {

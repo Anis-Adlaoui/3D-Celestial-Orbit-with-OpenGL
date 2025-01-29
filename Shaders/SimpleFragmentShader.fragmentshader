@@ -7,17 +7,16 @@ out vec4 FragColor;
 
 uniform sampler2D texture1;
 uniform vec3 starColor;
-uniform float time; // Ajout d'une variable de temps
+uniform float time;
+uniform float ambientLightIntensity;
 
 void main() {
     if (isStarOut == 1) {
-        // Générer une valeur aléatoire basée sur la position et le temps
         float randomValue = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453 + time);
-        
-        // Ajuster la luminosité de l'étoile avec la valeur aléatoire
-        float brightness = 0.5 + randomValue * 0.5; // Luminosité entre 0.5 et 1.0
+        float brightness = 0.5 + randomValue * 0.5;
         FragColor = vec4(starColor * brightness, 1.0);
     } else {
-        FragColor = texture(texture1, TexCoordsOut);
+        vec4 texColor = texture(texture1, TexCoordsOut);
+        FragColor = texColor * ambientLightIntensity;
     }
 }
